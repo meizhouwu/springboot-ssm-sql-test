@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 定义mapper接口路径 -->
+<mapper namespace="com.jxh.mapper.ScoreMapper">
+    <!--id的值保证Mapper接口的方法名一值-->
+
+    <!-- List<Score> findAll();-->
+    <select id="findAll" resultType="Score">
+        SELECT * FROM t_score
+    </select>
+
+    <!--Score findById(Long id);-->
+    <select id="findById" resultType="Score">
+        SELECT * FROM t_score WHERE id=#{id}
+    </select>
+
+    <!--void addScore(Score score);-->
+    <insert id="addScore">
+        INSERT INTO t_score(student_id, course_id, score, create_time, note)
+        VALUES (#{student_id}, #{course_id}, #{score}, #{create_time}, #{note})
+    </insert>
+
+    <!-- void updateScore(Score score);-->
+    <update id="updateScore">
+        UPDATE t_score
+        SET student_id=#{student_id},course_id=#{course_id},score=#{score},update_time=#{update_time},note=#{note}
+        WHERE id=#{id}
+    </update>
+
+    <!-- void deleteScore(Long id);-->
+    <delete id="deleteScore">
+        DELETE FROM t_score WHERE id=#{id}
+    </delete>
+
+
+<!--    List<Score> find();-->
+    <select id="find" resultMap="scoreMap">
+        select tsc.score tscore,ts.name tsname,tc.name tcname
+            from t_score tsc
+                left join t_student ts on tsc.student_id = ts.id
+                left join t_course tc on tsc.course_id = tc.id
+    </select>
+    <resultMap id="scoreMap" type="com.jxh.domain.Score">
+        <id column="tscore" property="score"/>
+        <association property="student" javaType="com.jxh.domain.Student">
+            <id column="tsname" property="name"/>
+        </association>
+        <association property="course" javaType="com.jxh.domain.Course">
+            <id column="tcname" property="name"/>
+        </association>
+    </resultMap>
+</mapper>

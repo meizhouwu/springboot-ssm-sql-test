@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 定义mapper接口路径 -->
+<mapper namespace="com.jxh.mapper.StudentMapper">
+<!--    &lt;!&ndash;id的值保证Mapper接口的方法名一值&ndash;&gt;-->
+
+<!--    &lt;!&ndash; List<Student> findAll();&ndash;&gt;-->
+<!--    <select id="findAll" resultType="Student">-->
+<!--        SELECT * FROM t_student-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash;List<Student> findById(Long id);&ndash;&gt;-->
+<!--    <select id="findById" resultType="Student">-->
+<!--        SELECT * FROM t_student WHERE id=#{id}-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash;void addStudent(Student student);&ndash;&gt;-->
+<!--    <insert id="addStudent">-->
+<!--        INSERT INTO t_student(name, sn, gender, age, phone, address, email, course_id, create_time)-->
+<!--        VALUES (#{name}, #{sn}, #{gender}, #{age}, #{phone}, #{address}, #{email}, #{course_id}, #{create_time})-->
+<!--    </insert>-->
+
+<!--    &lt;!&ndash;void updateStudent(Student student);&ndash;&gt;-->
+<!--    <update id="updateStudent">-->
+<!--        UPDATE t_student-->
+<!--        SET name=#{name},sn=#{sn},gender=#{gender},age=#{age},phone=#{phone},address=#{address},email=#{email},name=#{name},course_id=#{course_id}-->
+<!--        WHERE id=#{id}-->
+<!--    </update>-->
+
+<!--    &lt;!&ndash;void deleteStudent(Long id);&ndash;&gt;-->
+<!--    <delete id="deleteStudent">-->
+<!--        DELETE FROM t_student WHERE id=#{id}-->
+<!--    </delete>-->
+
+<!--    List<Student> findAll();-->
+    <select id="findAll" resultMap="studentMap">
+        select ts.*,tc.id tcid,tc.name tcname
+        from t_student ts left join t_course tc on tc.id = ts.course_id
+    </select>
+    <resultMap id="studentMap" type="com.jxh.domain.Student">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <association property="course" javaType="com.jxh.domain.Course">
+            <id column="tcid" property="id"/>
+            <result column="tcname" property="name"/>
+        </association>
+    </resultMap>
+</mapper>
